@@ -8,10 +8,10 @@ export SYN_DIR = $(shell pwd)
 export SRC_DIR = ../src
 
 # source files for synthesis
-export SOURCE_FILES = #TODO
+export SOURCE_FILES = mce.sv#TODO
 
 # Top module for synthesis
-export TOP_MODULE  = #TODO
+export TOP_MODULE  = mce#TODO
 
 # End of SOURCE_FILES
 .PHONY : all clean
