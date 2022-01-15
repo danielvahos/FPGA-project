@@ -103,7 +103,6 @@ always_ff@(posedge sys_clk or sys_rst)
             count<= 0;
         end
     end
-endmodule
 
 always_ff @(posedge pixel_clk)
     begin
@@ -129,3 +128,5 @@ always_ff @(posedge pixel_clk)
             LED[2] <= ~LED[2];
     end
     end
+
+endmodule
