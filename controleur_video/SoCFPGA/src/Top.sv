@@ -124,8 +124,10 @@ always_ff @(posedge pixel_clk)
     else
     begin
         count2 <= count2 + 1;
-        if (count2==h2)
+        if (count2>=h2)
+        begin
             LED[2] <= ~LED[2];
+        end
     end
     end
 
