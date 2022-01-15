@@ -85,12 +85,13 @@ logic [h:0] count;
 always_ff@(posedge sys_clk or sys_rst)
     begin
         LED[0]<=KEY[0];
-        count <= count + 1;
-        if (!sys_rst && count>=h)
+        if (!sys_rst)
         begin
-            count <= 0;
-            LED[1] <= ~LED[1];
-        end
+            count <= count + 1;
+            if (count>=h)
+            begin
+                LED[1] <= ~LED[1];
+            end
         else
         begin
             LED[1]<=0;
