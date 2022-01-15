@@ -73,11 +73,11 @@ assign wshb_if_sdram.bte = '0 ;
 //--------------------------
 //------- Code Eleves ------
 //--------------------------
-ifdef SIMULATION
+`ifdef SIMULATION
     localparam h=50;
-    else
+`else
     localparam h=50000000;
-endif
+`endif
 logic [h:0] count;
 //integer h=50000000;
 //integer count;
