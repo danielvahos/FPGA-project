@@ -86,7 +86,7 @@ logic pixel_rst;
 logic flipflop;
 
 
-always_ff@(posedge sys_clk or sys_rst)
+always_ff@(posedge sys_clk)
     begin
         LED[0]<=KEY[0];
         if (!sys_rst)
@@ -117,9 +117,6 @@ always_ff @(posedge pixel_clk)
             pixel_rst= 0;
         end
     end
-    
-always_ff @(posedge pixel_clk)
-    begin
     if (pixel_rst)
     begin
         count2 <= 0;
@@ -132,7 +129,6 @@ always_ff @(posedge pixel_clk)
         begin
             LED[2] <= ~LED[2];
         end
-    end
     end
 
 endmodule
