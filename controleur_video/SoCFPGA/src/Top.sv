@@ -73,7 +73,17 @@ assign wshb_if_sdram.bte = '0 ;
 //--------------------------
 //------- Code Eleves ------
 //--------------------------
+integer h=50000000;
+integer count;
 
-
-
+always_ff@(posedge sys_clk or sys_rst)
+    begin
+        LED[0]<=KEY[0];
+        count <= count + 1;
+        if (!sys_rst and count>=h)
+        begin
+            count <= 0;
+            LED[1] <= ~LED[1];
+        end
+    end
 endmodule
