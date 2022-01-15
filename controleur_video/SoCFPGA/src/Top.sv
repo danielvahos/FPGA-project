@@ -92,6 +92,7 @@ always_ff@(posedge sys_clk or sys_rst)
             begin
                 LED[1] <= ~LED[1];
             end
+        end
         else
         begin
             LED[1]<=0;
