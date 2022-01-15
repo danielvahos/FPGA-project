@@ -116,6 +116,10 @@ always_ff @(posedge pixel_clk)
             flipflop <= 0;
             pixel_rst= 0;
         end
+    end
+    
+always_ff @(posedge pixel_clk)
+    begin
     if (pixel_rst)
     begin
         count2 <= 0;
