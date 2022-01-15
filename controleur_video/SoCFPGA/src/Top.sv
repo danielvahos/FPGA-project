@@ -91,5 +91,10 @@ always_ff@(posedge sys_clk or sys_rst)
             count <= 0;
             LED[1] <= ~LED[1];
         end
+        else
+        begin
+            LED[1]<=0;
+            count<= 0;
+        end
     end
 endmodule
