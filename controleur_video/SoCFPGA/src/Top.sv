@@ -75,12 +75,16 @@ assign wshb_if_sdram.bte = '0 ;
 //--------------------------
 `ifdef SIMULATION
     localparam h=50;
+    localparam h2=16;
 `else
     localparam h=50000000;
+    localparam h2=160000000;
 `endif
-logic [h:0] count;
-//integer h=50000000;
-//integer count;
+logic [$clog2(h):0] count;
+logic [$clog2(h2):0] count2;
+logic pixel_rst;
+logic flipflop;
+
 
 always_ff@(posedge sys_clk or sys_rst)
     begin
@@ -100,3 +104,28 @@ always_ff@(posedge sys_clk or sys_rst)
         end
     end
 endmodule
+
+always_ff @(posedge pixel_clk)
+    begin
+        if (sys_rst)
+        begin
+            flipflop <=1;
+            pixel_rst<=1;
+        end
+        else
+        begin
+            flipflop <= 0;
+            pixel_rst= 0;
+        end
+    if (pixel_rst)
+    begin
+        count2 <= 0;
+        LED[2] <= 0;
+    end
+    else
+    begin
+        count2 <= count2 + 1;
+        if (count2==h2)
+            LED[2] <= ~LED[2];
+    end
+    end
