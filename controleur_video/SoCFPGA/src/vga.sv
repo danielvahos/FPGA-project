@@ -12,11 +12,11 @@ localparam HBP = 40;
 localparam VFP = 13;
 localparam VPULSE = 3;
 localparam VBP = 29;
+assign video_ifm.CLK = pixel_clk;
 
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
-assign video_ifm.CLK = pixel_clk;
 
 //For the counters (pixels and lines) From top-down
 always_ff @(posedge pixel_clk or posedge pixel_rst)
