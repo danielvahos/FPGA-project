@@ -31,7 +31,7 @@ begin
         if (count_pix == HDISP+HFP+HPULSE+HBP) // if the pixels of line are complete
         begin
             count_pix <= 0; //reset counter for pixels when is completed (to start from zero on the new line)
-            if (count_line == VDISP+VFP+VPUSE+VBP)
+            if (count_line == VDISP+VFP+VPULSE+VBP)
             begin
                 count_line <= 0; //reset line counter if it's completed
             end
