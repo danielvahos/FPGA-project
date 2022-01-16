@@ -14,9 +14,9 @@ logic [3:0]	SW;
 hws_if      hws_ifm();
 
 // Instance du module Top
+video_if video_if0() ;
 //Parameters HDISP for 160 and VDISP for 90
 Top #(.HDISP(160), .VDISP(90)) Top0(.*, .video_ifm(video_if0) ) ; //Interface video_if0 connected
-video_if video_if0() ;
 
 ///////////////////////////////
 //  Code élèves
