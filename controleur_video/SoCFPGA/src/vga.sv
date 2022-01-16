@@ -21,7 +21,12 @@ assign video_ifm.CLK = pixel_clk;
 //For the counters (pixels and lines) From top-down
 always_ff @(posedge pixel_clk or posedge pixel_rst)
 begin
-    if (!pixel_rst)
+    if (pixel_rst)
+    begin
+        count_pix <= 0;
+        count_line <= 0;
+    end
+    else
     begin
         if (count_pix == HDISP+HFP+HPULSE+HBP) // if the pixels of line are complete
         begin
@@ -45,7 +50,14 @@ end
 //Synchronisation
 always_ff @(posedge pixel_clk or posedge pixel_rst)
 begin
-    if (!pixel_rst)
+    if (pixel_rst)
+    begin
+        video_ifm.VS <= 1;
+        video_ifm.HS <= 1;
+        video_ifm.BLANK <= 0;
+        video_ifm.RGB <= {24{1'b0}};
+    end
+    else
     begin
         if (count_pix % 16 == 0 || count_line % 16 == 0) //it has to be every 16 lines
         begin
@@ -86,13 +98,6 @@ begin
             end
         end
         video_ifm.BLANK <= count_line >= count_pix && VFP + VPULSE + VBP >= HPULSE + HFP + HBP;
-    end
-    else
-    begin
-        video_ifm.VS <= 1;
-        video_ifm.HS <= 1;
-        video_ifm.BLANK <= 0;
-        video_ifm.RGB <= {24{1'b0}};
     end
 end
 
