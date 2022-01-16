@@ -78,7 +78,7 @@ assign wshb_if_sdram.bte = '0 ;
     localparam h2=16;
 `else
     localparam h=50000000;
-    localparam h2=160000000;
+    localparam h2=16000000;
 `endif
 logic [$clog2(h):0] count;
 logic [$clog2(h2):0] count2;
