@@ -10,6 +10,8 @@ module Top (
     hws_if.master       hws_ifm,
     video_if.master video_ifm //port video_ifm added
 );
+parameter HDISP = 800;
+parameter VDISP = 480;
 
 //====================================
 //  Déclarations des signaux internes
