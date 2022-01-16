@@ -14,7 +14,7 @@ localparam VPULSE = 3;
 localparam VBP = 29;
 
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
-logic [$clog2(VDISP+VFP+VPUSE+VBP):0] count_line; //Line equivalent to vertical constants
+logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
 assign video_ifm.CLK = pixel_clk;
 
