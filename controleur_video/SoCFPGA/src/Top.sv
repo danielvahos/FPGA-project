@@ -113,7 +113,7 @@ always_ff @(posedge pixel_clk)
     else
     begin
         flipflop <= 0;
-        pixel_rst= 0;
+        pixel_rst <= 0;
     end
 
 always_ff @(posedge pixel_clk)
