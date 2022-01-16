@@ -7,7 +7,8 @@ module Top (
 	output logic [7:0]	LED,
 	input  wire	 [3:0]	SW,
     // Les signaux du support matériel son regroupés dans une interface
-    hws_if.master       hws_ifm
+    hws_if.master       hws_ifm,
+    video_if.master video_ifm //port video_ifm added
 );
 
 //====================================
