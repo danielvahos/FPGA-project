@@ -117,17 +117,21 @@ always_ff @(posedge pixel_clk)
             pixel_rst= 0;
         end
     end
-    if (pixel_rst)
+
+always_ff @(posedge pixel_clk)
     begin
-        count2 <= 0;
-        LED[2] <= 0;
-    end
-    else
-    begin
-        count2 <= count2 + 1;
-        if (count2>=h2)
+        if (pixel_rst)
         begin
-            LED[2] <= ~LED[2];
+            count2 <= 0;
+            LED[2] <= 0;
+        end
+        else
+        begin
+            count2 <= count2 + 1;
+            if (count2>=h2)
+            begin
+                LED[2] <= ~LED[2];
+            end
         end
     end
 
