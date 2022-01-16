@@ -92,13 +92,19 @@ always_ff@(posedge sys_clk)
         if (!sys_rst)
         begin
             count <= count + 1;
-            if (count==h)
+            if (count == 0)
+            begin
                 LED[1] <= ~LED[1];
+            end
+            if (count >= h)
+            begin
+                count <= 0;
+            end
         end
         else
         begin
-            LED[1]<=0;
-            count<= 0;
+            LED[1] <= 0;
+            count <= 0;
         end
     end
 
@@ -111,7 +117,7 @@ always_ff @(posedge pixel_clk)
     else
     begin
         flipflop <= 0;
-        pixel_rst <= 0;
+        pixel_rst <= flipflop;
     end
 
 always_ff @(posedge pixel_clk)
@@ -123,8 +129,14 @@ always_ff @(posedge pixel_clk)
     else
     begin
         count2 <= count2 + 1;
-        if (count2==h2)
+        if (count2 == 0)
+        begin
             LED[2] <= ~LED[2];
+        end
+        if (count2 >= h2)
+        begin
+            count2 <= 0;
+        end
     end
 
 endmodule
