@@ -92,10 +92,8 @@ always_ff@(posedge sys_clk)
         if (!sys_rst)
         begin
             count <= count + 1;
-            if (count>=h)
-            begin
+            if (count==h)
                 LED[1] <= ~LED[1];
-            end
         end
         else
         begin
