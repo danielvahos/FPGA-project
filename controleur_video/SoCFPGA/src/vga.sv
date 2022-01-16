@@ -52,10 +52,10 @@ always_ff @(posedge pixel_clk or posedge pixel_rst)
 begin
     if (pixel_rst)
     begin
-        video_ifm.VS <= 1;
-        video_ifm.HS <= 1;
-        video_ifm.BLANK <= 0;
-        video_ifm.RGB <= {24{1'b0}};
+		video_ifm.BLANK <= 0;
+  		video_ifm.VS <= 1;
+  		video_ifm.HS <= 1;
+  		video_ifm.RGB <= {24{1'b0}};
     end
     else
     begin
