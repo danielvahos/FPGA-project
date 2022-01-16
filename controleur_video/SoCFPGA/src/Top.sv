@@ -1,6 +1,7 @@
 `default_nettype none
 
-module Top (
+module Top #(parameter HDISP = 800,
+            parameter VDISP = 480)(
     // Les signaux externes de la partie FPGA
 	input  wire         FPGA_CLK1_50,
 	input  wire  [1:0]	KEY,
@@ -10,8 +11,6 @@ module Top (
     hws_if.master       hws_ifm,
     video_if.master video_ifm //port video_ifm added
 );
-parameter HDISP = 800;
-parameter VDISP = 480;
 
 //====================================
 //  Déclarations des signaux internes
