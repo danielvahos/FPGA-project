@@ -138,5 +138,6 @@ always_ff @(posedge pixel_clk)
             count2 <= 0;
         end
     end
+vga #(.HDISP(HDISP), .VDISP(VDISP)) vga_inst(.pixel_clk(pixel_clk), .pixel_rst(pixel_rst), .video_ifm(video_ifm));//Instance vga
 
 endmodule
