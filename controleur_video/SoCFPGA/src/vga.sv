@@ -42,5 +42,58 @@ begin
     end
 end
 
+//Synchronisation
+always_ff @(posedge pixel_clk or posedge pixel_rst)
+begin
+    if (!pixel_rst)
+    begin
+        if (count_pix % 16 == 0 || count_line % 16 == 0) //it has to be every 16 lines
+        begin
+            video_ifm.RGB <= {24{1'b1}}; //8bits for each color
+        end
+        else
+        begin
+            if (count_pix % 16 != 0 && count_line % 16 != 0)
+            begin
+                video_ifm.RGB <= {24{1'b0}}; //8 bits for each color
+            end
+
+        end
+
+        //Condition for counter of pixels
+        if (count_pix < HFP || count_pix >= HFP + HPULSE)
+        begin
+            video_ifm.HS <= 1;
+        end
+        else
+        begin
+            if (count_pix >= HFP && count_pix < HFP + HPULSE)
+            begin
+                video_ifm.HS <= 0;
+            end
+        end
+
+        //Condition for counter of lines
+        if (count_line < VFP || count_line >= VFP + VPULSE )
+        begin
+            video_ifm.VS <= 1;
+        end
+        else
+        begin
+            if (count_line >= VFP && count_line < VFP+VPULSE)
+            begin
+                video_ifm.VS <= 0;
+            end
+        end
+        video_ifm.BLANK <= count_line >= count_pix && VFP + VPULSE + VBP >= HPULSE + HFP + HBP;
+    end
+    else
+    begin
+        video_ifm.VS <= 1;
+        video_ifm.HS <= 1;
+        video_ifm.BLANK <= 0;
+        video_ifm.RGB <= {24{1'b0}};
+    end
+end
 
 endmodule
