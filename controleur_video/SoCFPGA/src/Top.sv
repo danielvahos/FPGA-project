@@ -91,7 +91,12 @@ logic flipflop;
 always_ff@(posedge sys_clk)
     begin
         LED[0]<=KEY[0];
-        if (!sys_rst)
+        if (sys_rst)
+        begin
+            LED[1] <= 0;
+            count <= 0;
+        end
+        else
         begin
             count <= count + 1;
             if (count == 0)
@@ -102,11 +107,6 @@ always_ff@(posedge sys_clk)
             begin
                 count <= 0;
             end
-        end
-        else
-        begin
-            LED[1] <= 0;
-            count <= 0;
         end
     end
 
