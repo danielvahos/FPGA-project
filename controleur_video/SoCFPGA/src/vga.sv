@@ -87,7 +87,7 @@ begin
         begin
             video_ifm.VS <= 0;
         end
-        video_ifm.BLANK <= count_line >= count_pix && VFP + VPULSE + VBP >= HPULSE + HFP + HBP;
+        video_ifm.BLANK <= count_line >= VFP + VPULSE + VBP && count_pix >= HPULSE + HFP + HBP;
     end
 end
 
