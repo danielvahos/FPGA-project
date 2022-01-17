@@ -63,13 +63,9 @@ begin
         begin
             video_ifm.RGB <= {24{1'b1}}; //8bits for each color
         end
-        else
+        if (count_pix % 16 != 0 && count_line % 16 != 0)
         begin
-            if (count_pix % 16 != 0 && count_line % 16 != 0)
-            begin
-                video_ifm.RGB <= {24{1'b0}}; //8 bits for each color
-            end
-
+            video_ifm.RGB <= {24{1'b0}}; //8 bits for each color
         end
 
         //Condition for counter of pixels
@@ -77,12 +73,9 @@ begin
         begin
             video_ifm.HS <= 1;
         end
-        else
+        if (count_pix >= HFP && count_pix < HFP + HPULSE)
         begin
-            if (count_pix >= HFP && count_pix < HFP + HPULSE)
-            begin
-                video_ifm.HS <= 0;
-            end
+            video_ifm.HS <= 0;
         end
 
         //Condition for counter of lines
@@ -90,12 +83,9 @@ begin
         begin
             video_ifm.VS <= 1;
         end
-        else
+        if (count_line >= VFP && count_line < VFP+VPULSE)
         begin
-            if (count_line >= VFP && count_line < VFP+VPULSE)
-            begin
-                video_ifm.VS <= 0;
-            end
+            video_ifm.VS <= 0;
         end
         video_ifm.BLANK <= count_line >= count_pix && VFP + VPULSE + VBP >= HPULSE + HFP + HBP;
     end
