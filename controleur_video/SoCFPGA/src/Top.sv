@@ -75,6 +75,8 @@ assign wshb_if_sdram.bte = '0 ;
 //--------------------------
 //------- Code Eleves ------
 //--------------------------
+parameter HDISP = 800;
+parameter VDISP = 480;
 `ifdef SIMULATION
     localparam h=50;
     localparam h2=16;
