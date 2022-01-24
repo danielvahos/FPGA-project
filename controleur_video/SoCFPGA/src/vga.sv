@@ -19,14 +19,46 @@ logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizon
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
 //Assigning constant values to wshb_ifm
-assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
-assign wshb_ifm.adr= '0;// address for writing
+//assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
+//assign wshb_ifm.adr= '0;// address for writing
 assign wshb_ifm.cyc = 1'b1;//the bus is selected
+
+
 assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
 assign wshb_ifm.stb = 1'b1; //it's asked for a transaction
-assign wshb_ifm.we = 1'b1; //(write enable) transaction in writing
+assign wshb_ifm.we = '0; //(write enable) transaction in NOT writing
 assign wshb_ifm.cti = '0; //classic transference
 assign wshb_ifm.bte = '0; //without utility
+
+
+//SDRAM reading
+
+always_ff @(posedge wshb_ifm.clk or posedge wshb_ifm.rst)
+begin
+	if(wshb_ifm.rst)
+    begin
+		wshb_ifm.adr <= 0;
+    end
+	else
+	begin
+		if(wshb_ifm.ack == 1)
+		begin
+			if(wshb_ifm.adr == 4*( VDISP*HDISP -1))
+			begin
+				wshb_ifm.adr <= 0;
+			end
+			else
+			begin
+				wshb_ifm.adr <= wshb_ifm.adr + 4;
+			end
+		end
+	end
+end
+
+
+//==========================================================
+
+
 
 //For the counters (pixels and lines) From top-down
 always_ff @(posedge pixel_clk or posedge pixel_rst)
