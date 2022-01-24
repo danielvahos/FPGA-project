@@ -1,7 +1,7 @@
 module vga(
     input wire pixel_clk,
     input wire pixel_rst,
-    video_if.master video_ifm
+    video_if.master video_ifm,
 
 
     wshb_if.master wshb_ifm // added wishbone
