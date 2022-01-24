@@ -2,6 +2,9 @@ module vga(
     input wire pixel_clk,
     input wire pixel_rst,
     video_if.master video_ifm
+
+
+    wshb_if.master wshb_ifm // added wishbone
 );
 
 parameter HDISP = 800;
@@ -17,6 +20,15 @@ assign video_ifm.CLK = pixel_clk;
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
+
+assign wshb_ifm.dat_ms = 32'hBABECAFE //Data of 32 bits emitted
+assign wshb_ifm.adr= '0;// address for writing
+assign wshb_ifm.cyc = 1'b1;//the bus is selected
+assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
+assign wshb_ifm.stb = 1'b1; //it's asked for a transaction
+assign wshb_ifm.we = 1'b1; //(write enable) transaction in writing
+assign wshb_ifm.cti = '0; //classic transference
+assign wshb_ifm.bte = '0; //without utility
 
 //For the counters (pixels and lines) From top-down
 always_ff @(posedge pixel_clk or posedge pixel_rst)
