@@ -21,7 +21,7 @@ logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizon
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
 
-assign wshb_ifm.dat_ms = 32'hBABECAFE //Data of 32 bits emitted
+assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
 assign wshb_ifm.adr= '0;// address for writing
 assign wshb_ifm.cyc = 1'b1;//the bus is selected
 assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
