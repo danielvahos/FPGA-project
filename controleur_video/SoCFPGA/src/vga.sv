@@ -25,11 +25,29 @@ assign wshb_ifm.cyc = 1'b1;//the bus is selected
 
 
 assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
-assign wshb_ifm.stb = 1'b1; //it's asked for a transaction
+assign wshb_ifm.stb = ~wfull; //it's asked for a transaction
 assign wshb_ifm.we = '0; //(write enable) transaction in NOT writing
 assign wshb_ifm.cti = '0; //classic transference
 assign wshb_ifm.bte = '0; //without utility
 
+logic read, rempty, write, wfull, walmost_full;
+logic [31:0] wdata, rdata; //32 bits
+
+// Assigning-Instatiate FIFO
+async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
+    .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
+    .rclk(pixel_clk),
+    //I use the same names because they're uniques
+    .read(read),
+    .rdata(rdata),
+    .rempty(rempty),
+    .wclk(wshb_ifm.clk),
+    .wdata(wshb_ifm.dat_sm),
+    .write(write), //.write(wshb_ifm.ack && ~wfull),
+    .wfull(wfull),
+    .walmost_full(walmost_full));
+
+assign write = wshb_ifm.ack && ~wfull;
 
 //SDRAM reading
 
@@ -41,7 +59,7 @@ begin
     end
 	else
 	begin
-		if(wshb_ifm.ack == 1)
+		if(write) //We must guarantee that fifo is not full (wshb_ifm.ack && ~wfull)
 		begin
 			if(wshb_ifm.adr == 4*( VDISP*HDISP -1))
 			begin
