@@ -18,6 +18,9 @@ assign video_ifm.CLK = pixel_clk;
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
+logic read, rempty, write, wfull, walmost_full;
+logic [31:0] wdata, rdata; //32 bits
+assign write = wshb_ifm.ack && ~wfull;
 // Assigning-Instatiate FIFO
 async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
     .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
@@ -44,10 +47,6 @@ assign wshb_ifm.we = '0; //(write enable) transaction in NOT writing
 assign wshb_ifm.cti = '0; //classic transference
 assign wshb_ifm.bte = '0; //without utility
 
-logic read, rempty, write, wfull, walmost_full;
-logic [31:0] wdata, rdata; //32 bits
-
-assign write = wshb_ifm.ack && ~wfull;
 
 //SDRAM reading
 
