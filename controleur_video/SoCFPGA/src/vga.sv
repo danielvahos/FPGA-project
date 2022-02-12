@@ -18,6 +18,20 @@ assign video_ifm.CLK = pixel_clk;
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
+// Assigning-Instatiate FIFO
+async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
+    .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
+    .rclk(pixel_clk),
+    //I use the same names because they're uniques
+    .read(read),
+    .rdata(rdata),
+    .rempty(rempty),
+    .wclk(wshb_ifm.clk),
+    .wdata(wshb_ifm.dat_sm),
+    .write(write), //.write(wshb_ifm.ack && ~wfull),
+    .wfull(wfull),
+    .walmost_full(walmost_full));
+
 //Assigning constant values to wshb_ifm
 //assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
 //assign wshb_ifm.adr= '0;// address for writing
@@ -32,20 +46,6 @@ assign wshb_ifm.bte = '0; //without utility
 
 logic read, rempty, write, wfull, walmost_full;
 logic [31:0] wdata, rdata; //32 bits
-
-// Assigning-Instatiate FIFO
-async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
-    .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
-    .rclk(pixel_clk),
-    //I use the same names because they're uniques
-    .read(read),
-    .rdata(rdata),
-    .rempty(rempty),
-    .wclk(wshb_ifm.clk),
-    .wdata(wshb_ifm.dat_sm),
-    .write(write), //.write(wshb_ifm.ack && ~wfull),
-    .wfull(wfull),
-    .walmost_full(walmost_full));
 
 assign write = wshb_ifm.ack && ~wfull;
 
