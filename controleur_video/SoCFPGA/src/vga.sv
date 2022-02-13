@@ -14,7 +14,7 @@ localparam VFP = 13;
 localparam VPULSE = 3;
 localparam VBP = 29;
 assign video_ifm.CLK = pixel_clk;
-assign video_ifm.RGB = rdata[23:0];
+
 
 
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
@@ -23,6 +23,7 @@ logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical
 logic read, rempty, write, wfull, walmost_full;
 logic [31:0] wdata, rdata; //32 bits
 logic wfull_first;
+assign video_ifm.RGB = rdata[23:0];
 assign write = wshb_ifm.ack && ~wfull;
 assign read = video_ifm.BLANK;
 
