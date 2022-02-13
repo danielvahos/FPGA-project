@@ -14,13 +14,18 @@ localparam VFP = 13;
 localparam VPULSE = 3;
 localparam VBP = 29;
 assign video_ifm.CLK = pixel_clk;
+assign video_ifm.RGB = rdata[23:0];
+
 
 logic [$clog2(HDISP+HFP+HPULSE+HBP):0] count_pix; //Pixels equivalent to horizontals constants
 logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical constants
 
 logic read, rempty, write, wfull, walmost_full;
 logic [31:0] wdata, rdata; //32 bits
+logic wfull_first;
 assign write = wshb_ifm.ack && ~wfull;
+assign read = video_ifm.BLANK;
+
 // Assigning-Instatiate FIFO
 async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
     .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
@@ -37,7 +42,7 @@ async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
 
 //Assigning constant values to wshb_ifm
 //assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
-//assign wshb_ifm.adr= '0;// address for writing
+//assign wshb_ifm.adr= '0: ;// address for writing
 assign wshb_ifm.cyc = 1'b1;//the bus is selected
 
 
@@ -72,6 +77,36 @@ begin
 	end
 end
 
+//=============================================================
+
+// Reading FIFO
+logic flipflop_fifo;
+logic wfulls;
+
+always_ff@(posedge pixel_clk or posedge pixel_rst)
+    if (pixel_rst)
+    begin
+        flipflop_fifo <= 0;
+        wfulls <= 0;
+    end
+    else
+    begin
+        flipflop_fifo <= wfull;
+        wfulls <= flipflop_fifo;
+    end
+
+always_ff@(posedge pixel_clk or posedge pixel_rst)
+    begin
+        if (pixel_rst)
+            wfull_first <= 0;
+        else
+        begin
+            if (wfulls)
+                wfull_first <= 1;
+            else
+                wfull_first <= 0;
+        end
+    end
 
 //==========================================================
 
@@ -106,6 +141,9 @@ begin
     end
 end
 
+
+
+
 //Synchronisation
 always_ff @(posedge pixel_clk or posedge pixel_rst)
 begin
@@ -114,10 +152,12 @@ begin
 		video_ifm.BLANK <= 0;
   		video_ifm.VS <= 1;
   		video_ifm.HS <= 1;
-  		video_ifm.RGB <= {24{1'b0}};
+  	//	video_ifm.RGB <= {24{1'b0}};
     end
     else
     begin
+
+/*
         if (count_pix % 16 == 0 || count_line % 16 == 0) //it has to be every 16 lines
         begin
             video_ifm.RGB <= {24{1'b1}}; //8bits for each color
@@ -126,6 +166,9 @@ begin
         begin
             video_ifm.RGB <= {24{1'b0}}; //8 bits for each color
         end
+*/
+
+
 
         //Condition for counter of pixels
         if (count_pix < HFP || count_pix >= HFP + HPULSE)
