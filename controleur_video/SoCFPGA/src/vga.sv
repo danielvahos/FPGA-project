@@ -42,7 +42,7 @@ async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
 //Assigning constant values to wshb_ifm
 //assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
 //assign wshb_ifm.adr= '0: ;// address for writing
-assign wshb_ifm.cyc = 1'b1;//the bus is selected
+assign wshb_ifm.cyc = wshb_ifm.stb;//the bus is selected
 
 
 assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
@@ -50,6 +50,8 @@ assign wshb_ifm.stb = ~wfull; //it's asked for a transaction
 assign wshb_ifm.we = 1'b0; //(write enable) transaction in NOT writing
 assign wshb_ifm.cti = 3'b0; //classic transference
 assign wshb_ifm.bte = 2'b0; //without utility
+
+//assign wshb_ifm.dat_ms = '0;
 
 assign write = wshb_ifm.ack && ~wfull;
 assign read = video_ifm.BLANK;
