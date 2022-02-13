@@ -39,9 +39,6 @@ async_fifo #(.DATA_WIDTH(32), .ALMOST_FULL_THRESHOLD(224), .DEPTH_WIDTH(8)) fifo
     .wfull(wfull),
     .walmost_full(walmost_full));
 
-//Assigning constant values to wshb_ifm
-//assign wshb_ifm.dat_ms = 32'hBABECAFE;//Data of 32 bits emitted
-//assign wshb_ifm.adr= '0: ;// address for writing
 assign wshb_ifm.cyc = wshb_ifm.stb;//the bus is selected
 
 
@@ -155,23 +152,9 @@ begin
 		video_ifm.BLANK <= 0;
   		video_ifm.VS <= 1;
   		video_ifm.HS <= 1;
-  	//	video_ifm.RGB <= {24{1'b0}};
     end
     else
     begin
-
-/*
-        if (count_pix % 16 == 0 || count_line % 16 == 0) //it has to be every 16 lines
-        begin
-            video_ifm.RGB <= {24{1'b1}}; //8bits for each color
-        end
-        if (count_pix % 16 != 0 && count_line % 16 != 0)
-        begin
-            video_ifm.RGB <= {24{1'b0}}; //8 bits for each color
-        end
-*/
-
-
 
         //Condition for counter of pixels
         if (count_pix < HFP || count_pix >= HFP + HPULSE)
