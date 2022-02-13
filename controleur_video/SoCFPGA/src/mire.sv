@@ -11,7 +11,7 @@ logic [$clog2(VDISP)-1:0] count_line;
 //For the counters (pixels and lines) From top-down
 always_ff @(posedge wshb_ifm.clk or posedge wshb_ifm.rst)
 begin
-    if (pixel_rst)
+    if (wshb_ifm.rst)
     begin
         count_pix <= 0;
         count_line <= 0;
