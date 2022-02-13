@@ -23,9 +23,7 @@ logic [$clog2(VDISP+VFP+VPULSE+VBP):0] count_line; //Line equivalent to vertical
 logic read, rempty, write, wfull, walmost_full;
 logic [31:0] wdata, rdata; //32 bits
 logic wfull_first;
-assign video_ifm.RGB = rdata[23:0];
-assign write = wshb_ifm.ack && ~wfull;
-assign read = video_ifm.BLANK;
+
 
 // Assigning-Instatiate FIFO
 async_fifo #(.DATA_WIDTH(32), .DEPTH_WIDTH(8)) fifo_inst(
@@ -49,10 +47,12 @@ assign wshb_ifm.cyc = 1'b1;//the bus is selected
 
 assign wshb_ifm.sel = 4'b1111; //the 4 octets sont for writing
 assign wshb_ifm.stb = ~wfull; //it's asked for a transaction
-assign wshb_ifm.we = '0; //(write enable) transaction in NOT writing
-assign wshb_ifm.cti = '0; //classic transference
-assign wshb_ifm.bte = '0; //without utility
+assign wshb_ifm.we = 1b'0; //(write enable) transaction in NOT writing
+assign wshb_ifm.cti = 3b'0; //classic transference
+assign wshb_ifm.bte = 2b'0; //without utility
 
+assign write = wshb_ifm.ack && ~wfull;
+assign read = video_ifm.BLANK;
 
 //SDRAM reading
 
@@ -60,7 +60,7 @@ always_ff @(posedge wshb_ifm.clk or posedge wshb_ifm.rst)
 begin
 	if(wshb_ifm.rst)
     begin
-		wshb_ifm.adr <= 0;
+		wshb_ifm.adr <= 32'b0;
     end
 	else
 	begin
@@ -68,7 +68,7 @@ begin
 		begin
 			if(wshb_ifm.adr == 4*( VDISP*HDISP -1))
 			begin
-				wshb_ifm.adr <= 0;
+				wshb_ifm.adr <= 32'b0;
 			end
 			else
 			begin
@@ -143,9 +143,9 @@ begin
 end
 
 
-
-
 //Synchronisation
+assign video_ifm.RGB = rdata[23:0];
+
 always_ff @(posedge pixel_clk or posedge pixel_rst)
 begin
     if (pixel_rst)
