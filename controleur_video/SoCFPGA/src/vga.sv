@@ -26,7 +26,7 @@ logic wfull_first;
 
 
 // Assigning-Instatiate FIFO
-async_fifo #(.DATA_WIDTH(32), .ALMOST_FULL_THRESHOLD(224) .DEPTH_WIDTH(8)) fifo_inst(
+async_fifo #(.DATA_WIDTH(32), .ALMOST_FULL_THRESHOLD(224), .DEPTH_WIDTH(8)) fifo_inst(
     .rst(wshb_ifm.rst),// Signal for 0 it's from Wishbone
     .rclk(pixel_clk),
     //I use the same names because they're uniques
